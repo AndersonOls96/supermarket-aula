@@ -1,9 +1,21 @@
 const express = require('express')
 const app = express()
+const bodyparser = require('body-parser')
+const database = require('./config/db')
+const productRoutes = require('./routes/ProductRoutes');
 
-app.get('/', (req, res)=>{
-    res.status(200).send("Hello World")
-})
+
+app.use(bodyparser.json())
+
+app.use(productRoutes)
+
+database
+    .authenticate()
+    .then(() => {
+        console.log("Banco de dados conectado com sucesso!")
+    }).catch((msgErro) => {
+        console.log(msgErro)
+    })
 
 module.exports = app;
 
